@@ -18,3 +18,4 @@ from freqtrade.exchange.ftx import Ftx
 from freqtrade.exchange.hitbtc import Hitbtc
 from freqtrade.exchange.kraken import Kraken
 from freqtrade.exchange.kucoin import Kucoin
+from freqtrade.exchange.alpaca import Alpaca

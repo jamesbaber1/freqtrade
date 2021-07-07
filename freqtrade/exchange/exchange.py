@@ -1541,7 +1541,7 @@ class Exchange:
 
 
 def is_exchange_known_ccxt(exchange_name: str, ccxt_module: CcxtModuleType = None) -> bool:
-    return exchange_name in ccxt_exchanges(ccxt_module)
+    return exchange_name in ccxt_exchanges(ccxt_module) + ['alpaca']
 
 
 def is_exchange_officially_supported(exchange_name: str) -> bool:
@@ -1564,19 +1564,20 @@ def available_exchanges(ccxt_module: CcxtModuleType = None) -> List[str]:
 
 
 def validate_exchange(exchange: str) -> Tuple[bool, str]:
-    ex_mod = getattr(ccxt, exchange.lower())()
-    if not ex_mod or not ex_mod.has:
-        return False, ''
-    missing = [k for k in EXCHANGE_HAS_REQUIRED if ex_mod.has.get(k) is not True]
-    if missing:
-        return False, f"missing: {', '.join(missing)}"
+    if exchange.lower() != 'alpaca':
+        ex_mod = getattr(ccxt, exchange.lower())()
+        if not ex_mod or not ex_mod.has:
+            return False, ''
+        missing = [k for k in EXCHANGE_HAS_REQUIRED if ex_mod.has.get(k) is not True]
+        if missing:
+            return False, f"missing: {', '.join(missing)}"
 
-    missing_opt = [k for k in EXCHANGE_HAS_OPTIONAL if not ex_mod.has.get(k)]
+        missing_opt = [k for k in EXCHANGE_HAS_OPTIONAL if not ex_mod.has.get(k)]
 
-    if exchange.lower() in BAD_EXCHANGES:
-        return False, BAD_EXCHANGES.get(exchange.lower(), '')
-    if missing_opt:
-        return True, f"missing opt: {', '.join(missing_opt)}"
+        if exchange.lower() in BAD_EXCHANGES:
+            return False, BAD_EXCHANGES.get(exchange.lower(), '')
+        if missing_opt:
+            return True, f"missing opt: {', '.join(missing_opt)}"
 
     return True, ''
 
