@@ -21,9 +21,8 @@ def setup_utils_configuration(args: Dict[str, Any], method: RunMode) -> Dict[str
     configuration = Configuration(args, method)
     config = configuration.get_config()
 
-    # Ensure we do not use Exchange credentials if not using alpaca
-    if config['exchange']['name'] != 'alpaca':
-        remove_credentials(config)
+    # Ensure we do not use Exchange credentials
+    remove_credentials(config)
     validate_config_consistency(config)
 
     return config

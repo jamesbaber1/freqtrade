@@ -202,6 +202,19 @@ class Alpaca(exchange.Exchange):
         #         f"Stake-currency '{self._config['stake_currency']}' not compatible with "
         #         f"pair-whitelist. Please remove the following pairs: {invalid_pairs}")
 
+    def market_is_tradable(self, market: Dict[str, Any]) -> bool:
+        """
+        Check if the market symbol is tradable by Freqtrade.
+        By default, checks if it's splittable by `/` and both sides correspond to base / quote
+        """
+        return True
+
+    def get_pair_quote_currency(self, pair: str) -> str:
+        """
+        Return a pair's quote currency
+        """
+        return 'USD'
+
 
 class AlpacaApi(REST):
     def __init__(self, *args, **kwargs):
@@ -213,6 +226,14 @@ class AlpacaApi(REST):
             '1h': TimeFrame.Hour,
             '1m': TimeFrame.Minute
         }
+
+    @property
+    def markets(self):
+        return list(self.load_markets().keys())
+
+    @staticmethod
+    def calculate_fee(*args, **kwargs):
+        return {'rate': 0}
 
     @staticmethod
     def get_start(since):

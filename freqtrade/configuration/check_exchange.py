@@ -16,11 +16,12 @@ def remove_credentials(config: Dict[str, Any]) -> None:
     Used for backtesting / hyperopt / edge and utils.
     Modifies the input dict!
     """
-    config['exchange']['key'] = ''
-    config['exchange']['secret'] = ''
-    config['exchange']['password'] = ''
-    config['exchange']['uid'] = ''
-    config['dry_run'] = True
+    if config['exchange']['name'] != 'alpaca':
+        config['exchange']['key'] = ''
+        config['exchange']['secret'] = ''
+        config['exchange']['password'] = ''
+        config['exchange']['uid'] = ''
+        config['dry_run'] = True
 
 
 def check_exchange(config: Dict[str, Any], check_for_bad: bool = True) -> bool:
