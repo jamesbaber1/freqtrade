@@ -20,7 +20,6 @@ from freqtrade.strategy import IStrategy
 
 logger = logging.getLogger(__name__)
 
-
 try:
     import plotly.graph_objects as go
     from plotly.offline import plot
@@ -356,6 +355,7 @@ def generate_candlestick_graph(pair: str, data: pd.DataFrame, trades: pd.DataFra
     :param plot_config: Dict of Dicts containing advanced plot configuration
     :return: Plotly figure
     """
+
     plot_config = create_plotconfig(indicators1, indicators2, plot_config)
     rows = 2 + len(plot_config['subplots'])
     row_widths = [1 for _ in plot_config['subplots']]
@@ -372,7 +372,14 @@ def generate_candlestick_graph(pair: str, data: pd.DataFrame, trades: pd.DataFra
     fig['layout']['yaxis2'].update(title='Volume')
     for i, name in enumerate(plot_config['subplots']):
         fig['layout'][f'yaxis{3 + i}'].update(title=name)
+        fig['layout'][f'xaxis{3 + i}']['type'] = 'category'
+
     fig['layout']['xaxis']['rangeslider'].update(visible=False)
+
+    # remove empty dataframe space for closed markets
+    fig['layout']['xaxis']['type'] = 'category'
+    fig['layout']['xaxis2']['type'] = 'category'
+
     fig.update_layout(modebar_add=["v1hovermode", "toggleSpikeLines"])
 
     # Common information

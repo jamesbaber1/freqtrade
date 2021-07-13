@@ -3,6 +3,7 @@ import asyncio
 import http
 import inspect
 import logging
+import os
 from copy import deepcopy
 from datetime import datetime, timedelta
 from math import ceil
@@ -28,6 +29,12 @@ from freqtrade.misc import deep_merge_dicts, safe_value_fallback2
 from freqtrade.plugins.pairlist.pairlist_helpers import expand_pairlist
 
 CcxtModuleType = Any
+
+
+
+alpaca_trade_api_logger = logging.getLogger('alpaca_trade_api.rest')
+alpaca_trade_api_logger.setLevel(level=logging.ERROR)
+
 
 logger = logging.getLogger(__name__)
 
@@ -257,7 +264,7 @@ class AlpacaApi(REST):
             hour=now.hour,
             minute=now.minute,
         )
-        return f'{(now - timedelta(minutes=15)).isoformat()}Z'
+        return f'{(now - timedelta(minutes=16)).isoformat()}Z'
 
     @staticmethod
     def format_bars(bars):
